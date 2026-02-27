@@ -1,40 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ouvinte Repórter</title>
+  <title>Mural Ouvinte Repórter</title>
   <style>
-    body, html { margin: 0; padding: 0; height: 100%; width: 100%; background: #001a33; overflow: hidden; font-family: Arial, sans-serif; }
+    body, html { margin: 0; padding: 0; height: 100%; width: 100%; background: #001a33; overflow: hidden; font-family: sans-serif; }
     #container { height: 100vh; display: flex; flex-direction: column; }
-    .header { background: #001a33; color: #ffcc00; text-align: center; padding: 10px; font-weight: bold; border-bottom: 2px solid #003366; }
-    #track { display: flex; height: 100%; transition: transform 0.6s ease; }
+    .header { background: #000b1a; color: #ffcc00; text-align: center; padding: 12px; font-weight: bold; font-size: 18px; border-bottom: 3px solid #ffcc00; }
+    #track { display: flex; height: 100%; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
     .slide { min-width: 100%; height: 100%; display: flex; flex-direction: column; }
-    .foto { flex: 1; background: #000; display: flex; align-items: center; justify-content: center; }
-    .foto img { width: 100%; height: 100%; object-fit: cover; }
-    .caption { background: #001a33; padding: 15px; text-align: center; border-top: 2px solid #ffcc00; min-height: 100px; color: #fff; }
-    .caption b { color: #ffcc00; display: block; margin-bottom: 5px; }
+    .foto { flex: 1; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .foto img { width: 100%; height: 100%; object-fit: cover; } 
+    .caption { background: #001a33; padding: 15px; text-align: center; border-top: 2px solid #ffcc00; min-height: 110px; box-sizing: border-box; }
+    .caption b { color: #ffcc00; font-size: 16px; display: block; text-transform: uppercase; }
+    .caption .local { color: #00ccff; font-size: 12px; display: block; margin-top: 5px; font-weight: bold; }
+    .caption p { color: #fff; font-size: 14px; margin: 8px 0 0; line-height: 1.4; }
+    .msg { color: white; text-align: center; padding: 50px; width: 100%; font-size: 18px; }
   </style>
 </head>
 <body>
   <div id="container">
-    <div class="header">OUVINTE REPÓRTER</div>
-    <div id="track">Carregando denúncias...</div>
+    <div class="header">🎙️ OUVINTE REPÓRTER</div>
+    <div id="track"><div class="msg">Carregando denúncias...</div></div>
   </div>
 
   <script>
-    // COLE AQUI O SEU LINK DO GOOGLE SCRIPT (O QUE TERMINA EM /exec)
-    const urlPlanilha = "https://script.google.com/macros/s/AKfycbxTFx-S81fFhbH1sQpPH6XXXa1FnUTNl1SCNZKHL8ULon8ZO7xz1jlJscb3JuWhunO_2Q/exec";
+    const apiGoogle = "https://script.google.com/macros/s/AKfycbzDRy-gintbJeF7LC08m-41MZhnh3MRSkL_lnKGlpJ7VBFV-kvjoGCZwSGCmhMOy1qx/exec";
 
-    async function baixarDados() {
+    async function carregarMural() {
+      const track = document.getElementById("track");
       try {
-        const resposta = await fetch(urlPlanilha);
+        const resposta = await fetch(apiGoogle);
         const dados = await resposta.json();
         
-        const track = document.getElementById("track");
-        if (dados.length === 0) {
-          track.innerHTML = "<div style='color:white;text-align:center;width:100%;padding:20px;'>Nenhuma denúncia aprovada.</div>";
-          return;
+        if (!dados || dados.length === 0) { 
+          track.innerHTML = "<div class='msg'>Aguardando denúncias aprovadas (SIM)...</div>"; 
+          return; 
         }
 
         track.innerHTML = dados.map(item => `
@@ -42,23 +44,23 @@
             <div class="foto"><img src="${item.foto}"></div>
             <div class="caption">
               <b>${item.assunto}</b>
-              <small style="color:#00ccff">📍 ${item.local}</small>
+              <span class="local">📍 ${item.local}</span>
               <p>${item.descricao}</p>
             </div>
           </div>`).join('');
 
         let i = 0;
-        if (dados.length > 1) {
-          setInterval(() => {
-            i = (i + 1) % dados.length;
-            track.style.transform = `translateX(-${i * 100}%)`;
-          }, 8000);
+        if (dados.length > 1) { 
+          setInterval(() => { 
+            i = (i + 1) % dados.length; 
+            track.style.transform = `translateX(-${i * 100}%)`; 
+          }, 10000); 
         }
       } catch (e) {
-        console.error(e);
+        track.innerHTML = "<div class='msg'>Erro de conexão com a planilha.</div>";
       }
     }
-    baixarDados();
+    window.onload = carregarMural;
   </script>
 </body>
 </html>
