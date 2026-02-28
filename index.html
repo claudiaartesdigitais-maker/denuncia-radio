@@ -67,14 +67,13 @@
     </div>
 
     <div class="footer-action">
-      <a href="https://wa.me/SEU_NUMERO_AQUI" target="_blank" class="btn-denuncia">
-         📣 FAZER DENÚNCIA
+      <a href="https://forms.gle/mF4KCRneDkT8hYoS7" target="_blank" class="btn-denuncia">
+         📣 CLIQUE AQUI E FAÇA SUA DENÚNCIA
       </a>
     </div>
   </div>
 
   <script>
-    // URL ATUALIZADA QUE VOCÊ ME ENVIOU
     const apiURL = "https://script.google.com/macros/s/AKfycbxSgxohW-83EVHyGPPNlFHDYfZCp9OjdchrCEKmOUdILGJXumvEpG7967wY70VF1lZMBg/exec";
 
     async function carregar() {
@@ -90,13 +89,11 @@
           return;
         }
 
-        // 1. Carregar Capa (Coluna K)
         if (dados[0].capa && dados[0].capa.length > 5) {
           banner.innerHTML = `<img src="${dados[0].capa}">`;
           banner.style.display = "block";
         }
 
-        // 2. Carregar Slides
         track.innerHTML = dados.map(item => `
           <div class="slide">
             <div class="foto"><img src="${item.foto}"></div>
@@ -107,13 +104,12 @@
             </div>
           </div>`).join('');
 
-        // 3. Animação do Carrossel
         let i = 0;
         if (dados.length > 1) {
           setInterval(() => {
             i = (i + 1) % dados.length;
             track.style.transform = `translateX(-${i * 100}%)`;
-          }, 10000); // 10 segundos por slide
+          }, 10000);
         }
 
       } catch (e) {
