@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <style>
-    /* TRAVA TUDO PARA NÃO "FLUTUAR" */
     body, html { 
       margin: 0; padding: 0; height: 100%; width: 100%; 
       background: #ffffff; 
@@ -16,30 +15,32 @@
       height: 100vh; 
       display: flex; 
       flex-direction: column; 
-      justify-content: space-between; 
     }
 
-    /* Banner da Capa (Fixo no topo) */
+    /* CAPA EM DESTAQUE */
     #banner-capa { 
       width: 100%; display: none; 
       padding: 10px 0; 
       text-align: center; 
       flex-shrink: 0;
     }
-    #banner-capa img { width: 90%; max-width: 500px; height: auto; border-radius: 10px; }
+    #banner-capa img { 
+      width: 95%; 
+      max-width: 600px; 
+      height: 145px; 
+      object-fit: cover; 
+      border-radius: 12px; 
+    }
 
-    /* Área do Carrossel (Ocupa o centro sem rolar) */
+    /* ÁREA CENTRAL DO FEED */
     #viewport { 
       flex: 1; 
       overflow: hidden; 
       position: relative; 
-      display: flex; 
-      align-items: center; 
     }
     
     #track { 
       display: flex; 
-      width: 100%;
       height: 100%;
       transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); 
     }
@@ -49,59 +50,56 @@
       height: 100%; 
       display: flex; 
       flex-direction: column; 
-      justify-content: center;
     }
     
-    /* Foto Estática (Igual aos patrocinadores) */
+    /* FOTOS MAXIMIZADAS E PROPORCIONAIS */
     .foto { 
+      flex: 1; 
       width: 100%;
-      height: 320px; /* Altura controlada para não empurrar o layout */
       background: #ffffff; 
       display: flex; 
       align-items: center; 
       justify-content: center; 
       overflow: hidden;
-      flex-shrink: 0;
     }
     .foto img { 
-      max-width: 100%; 
-      max-height: 100%; 
-      object-fit: contain; /* Mantém proporção sem achatar */
+      width: 100%; 
+      height: 100%; 
+      object-fit: contain; 
     } 
 
-    /* Legenda Estática */
+    /* CONTEÚDO SEM LINHA AMARELA */
     .caption { 
       background: #ffffff; 
-      padding: 10px 15px; 
+      padding: 5px 20px; /* Reduzi o padding superior para aproximar da foto */
       text-align: center; 
-      border-top: 3px solid #ffcc00; 
       flex-shrink: 0;
     }
-    .caption b { color: #001a33; font-size: 16px; display: block; text-transform: uppercase; font-weight: 900; }
-    .caption .local { color: #d32f2f; font-size: 12px; display: block; margin-top: 2px; font-weight: bold; }
-    .caption p { color: #444; font-size: 13px; margin: 5px 0 0; line-height: 1.4; }
+    .caption b { color: #001a33; font-size: 18px; display: block; text-transform: uppercase; font-weight: 900; }
+    .caption .local { color: #d32f2f; font-size: 13px; display: block; margin-top: 2px; font-weight: bold; }
+    .caption p { color: #444; font-size: 14px; margin: 4px 0 0; line-height: 1.3; }
 
-    /* Botão Verde (Fixo no rodapé, bem próximo) */
+    /* BOTÃO VERDE POSICIONADO */
     .footer-action { 
       text-align: center; 
-      padding: 5px 0 15px 0; 
+      padding: 10px 0 20px 0; 
       background: #ffffff; 
       flex-shrink: 0;
     }
     .btn-denuncia {
       display: inline-block;
-      background-color: #28a745; /* VERDE */
+      background-color: #28a745; 
       color: white;
       text-decoration: none;
-      padding: 10px 25px;
+      padding: 12px 35px;
       border-radius: 30px;
       font-weight: bold;
       font-size: 14px;
       text-transform: uppercase;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2);
     }
 
-    .loading { color: #001a33; text-align: center; width: 100%; font-weight: bold; }
+    .loading { color: #001a33; text-align: center; padding-top: 100px; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -110,7 +108,7 @@
     <div id="banner-capa"></div>
 
     <div id="viewport">
-      <div id="track"><div class="loading">Carregando...</div></div>
+      <div id="track"><div class="loading">Sincronizando denúncias...</div></div>
     </div>
 
     <div class="footer-action">
@@ -165,7 +163,6 @@
         track.innerHTML = "<div class='loading'>Erro de conexão.</div>";
       }
     }
-
     carregar();
   </script>
 </body>
