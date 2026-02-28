@@ -3,88 +3,125 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <style>
-    body, html { margin: 0; padding: 0; background: #ffffff; font-family: 'Segoe UI', Arial, sans-serif; overflow-x: hidden; }
+    body, html { 
+      margin: 0; padding: 0; height: 100%; width: 100%; 
+      background: #ffffff; 
+      font-family: 'Segoe UI', Roboto, sans-serif; 
+      overflow: hidden; 
+    }
     
-    /* Capa da Coluna K */
-    #banner-capa { width: 100%; display: none; padding: 15px 0 5px 0; text-align: center; }
-    #banner-capa img { width: 92%; max-width: 600px; height: auto; border-radius: 10px; }
+    #container { height: 100vh; display: flex; flex-direction: column; }
 
-    /* Swiper Ajustado */
-    .swiper { width: 100%; height: 480px; margin-top: 5px; background: #ffffff; }
-    .swiper-slide { display: flex; justify-content: center; align-items: center; width: auto; }
-    
-    .card { width: 290px; height: 440px; background: #f8f9fa; border-radius: 15px; overflow: hidden; border: 1px solid #ddd; position: relative; display: flex; flex-direction: column; }
-    .foto { flex: 1; overflow: hidden; }
-    .foto img { width: 100%; height: 100%; object-fit: cover; }
-    
-    .caption { padding: 12px; text-align: center; background: #fff; border-top: 3px solid #ffcc00; }
-    .caption b { color: #001a33; font-size: 15px; display: block; text-transform: uppercase; }
-    .caption .local { color: #d32f2f; font-size: 11px; display: block; font-weight: bold; margin: 3px 0; }
-    .caption p { color: #555; font-size: 12px; margin: 5px 0 0; line-height: 1.3; }
+    /* Banner Dinâmico da Coluna K */
+    #banner-capa { 
+      width: 100%; display: none; 
+      padding: 15px 0 5px 0; 
+      text-align: center; 
+    }
+    #banner-capa img { width: 92%; max-width: 600px; height: auto; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-    /* Botão de Denúncia */
-    .footer-action { text-align: center; padding: 15px 0; background: #ffffff; }
+    /* Área do Carrossel */
+    #viewport { flex: 1; overflow: hidden; position: relative; }
+    #track { display: flex; height: 100%; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+    
+    .slide { min-width: 100%; height: 100%; display: flex; flex-direction: column; }
+    
+    .foto { flex: 1; background: #f8f9fa; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .foto img { width: 100%; height: 100%; object-fit: cover; } 
+
+    /* Legenda */
+    .caption { 
+      background: #ffffff; padding: 15px; text-align: center; border-top: 4px solid #ffcc00; 
+      min-height: 125px; box-sizing: border-box;
+    }
+    .caption b { color: #001a33; font-size: 16px; display: block; text-transform: uppercase; font-weight: 900; }
+    .caption .local { color: #d32f2f; font-size: 12px; display: block; margin-top: 4px; font-weight: bold; }
+    .caption p { color: #444; font-size: 13px; margin: 8px 0 0; line-height: 1.4; }
+
+    /* Botão de Denúncia Fixo no Rodapé */
+    .footer-action { text-align: center; padding: 15px 0 20px 0; background: #ffffff; }
     .btn-denuncia {
       display: inline-block;
-      background-color: #d32f2f; /* Vermelho alerta */
+      background-color: #d32f2f;
       color: white;
       text-decoration: none;
-      padding: 12px 25px;
+      padding: 12px 28px;
       border-radius: 30px;
       font-weight: bold;
       font-size: 14px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+      text-transform: uppercase;
     }
+
+    .loading { color: #001a33; text-align: center; padding: 50px; font-weight: bold; width: 100%; }
   </style>
 </head>
 <body>
 
-  <div id="banner-capa"></div>
-  
-  <div class="swiper">
-    <div class="swiper-wrapper" id="track"></div>
+  <div id="container">
+    <div id="banner-capa"></div>
+
+    <div id="viewport">
+      <div id="track"><div class="loading">Carregando denúncias...</div></div>
+    </div>
+
+    <div class="footer-action">
+      <a href="https://wa.me/SEU_NUMERO_AQUI" target="_blank" class="btn-denuncia">
+         📣 FAZER DENÚNCIA
+      </a>
+    </div>
   </div>
 
-  <div class="footer-action">
-    <a href="LINK_DO_SEU_FORMULARIO_AQUI" target="_blank" class="btn-denuncia">
-       📣 FAZER UMA DENÚNCIA
-    </a>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script>
-    const apiURL = "https://script.google.com/macros/s/AKfycbzyQa2RijUqdzt8Z9aKib1QTcx1evdWA-4tShdYU0eH6nIPpaMyDd4QcfuLSSPDMWjrkg/exec";
+    // URL ATUALIZADA QUE VOCÊ ME ENVIOU
+    const apiURL = "https://script.google.com/macros/s/AKfycbxSgxohW-83EVHyGPPNlFHDYfZCp9OjdchrCEKmOUdILGJXumvEpG7967wY70VF1lZMBg/exec";
 
     async function carregar() {
+      const track = document.getElementById("track");
+      const banner = document.getElementById("banner-capa");
+
       try {
         const res = await fetch(apiURL);
         const dados = await res.json();
-        if (!dados || dados.length === 0) return;
-
-        // Mostrar Capa (Coluna K)
-        if (dados[0].capa) {
-            const b = document.getElementById("banner-capa");
-            b.innerHTML = `<img src="${dados[0].capa}">`;
-            b.style.display = "block";
+        
+        if (!dados || dados.length === 0) {
+          track.innerHTML = "<div class='loading'>Aguardando novas denúncias.</div>";
+          return;
         }
 
-        document.getElementById("track").innerHTML = dados.map(item => `
-          <div class="swiper-slide">
-            <div class="card">
-              <div class="foto"><img src="${item.foto}"></div>
-              <div class="caption">
-                <b>${item.assunto}</b>
-                <span class="local">📍 ${item.local}</span>
-                <p>${item.descricao}</p>
-              </div>
+        // 1. Carregar Capa (Coluna K)
+        if (dados[0].capa && dados[0].capa.length > 5) {
+          banner.innerHTML = `<img src="${dados[0].capa}">`;
+          banner.style.display = "block";
+        }
+
+        // 2. Carregar Slides
+        track.innerHTML = dados.map(item => `
+          <div class="slide">
+            <div class="foto"><img src="${item.foto}"></div>
+            <div class="caption">
+              <b>🎙️ ${item.assunto}</b>
+              <span class="local">📍 ${item.local}</span>
+              <p>${item.descricao}</p>
             </div>
           </div>`).join('');
 
-        new Swiper('.swiper', { slidesPerView: 'auto', centeredSlides: true, spaceBetween: 20, grabCursor: true });
-      } catch (e) { console.error(e); }
+        // 3. Animação do Carrossel
+        let i = 0;
+        if (dados.length > 1) {
+          setInterval(() => {
+            i = (i + 1) % dados.length;
+            track.style.transform = `translateX(-${i * 100}%)`;
+          }, 10000); // 10 segundos por slide
+        }
+
+      } catch (e) {
+        track.innerHTML = "<div class='loading'>Erro ao conectar com a central.</div>";
+        console.error(e);
+      }
     }
+
     carregar();
   </script>
 </body>
