@@ -4,70 +4,104 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <style>
+    /* TRAVA TUDO PARA NÃO "FLUTUAR" */
     body, html { 
       margin: 0; padding: 0; height: 100%; width: 100%; 
       background: #ffffff; 
       font-family: 'Segoe UI', Roboto, sans-serif; 
-      overflow-x: hidden; 
+      overflow: hidden; 
     }
     
-    #container { display: flex; flex-direction: column; min-height: 100vh; }
+    #container { 
+      height: 100vh; 
+      display: flex; 
+      flex-direction: column; 
+      justify-content: space-between; 
+    }
 
-    /* Banner da Capa */
+    /* Banner da Capa (Fixo no topo) */
     #banner-capa { 
       width: 100%; display: none; 
-      padding: 15px 0 5px 0; 
+      padding: 10px 0; 
       text-align: center; 
+      flex-shrink: 0;
     }
-    #banner-capa img { width: 92%; max-width: 600px; height: auto; border-radius: 10px; }
+    #banner-capa img { width: 90%; max-width: 500px; height: auto; border-radius: 10px; }
 
-    /* Área do Carrossel */
-    #viewport { flex: 1; overflow: hidden; position: relative; }
-    #track { display: flex; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+    /* Área do Carrossel (Ocupa o centro sem rolar) */
+    #viewport { 
+      flex: 1; 
+      overflow: hidden; 
+      position: relative; 
+      display: flex; 
+      align-items: center; 
+    }
     
-    .slide { min-width: 100%; display: flex; flex-direction: column; }
+    #track { 
+      display: flex; 
+      width: 100%;
+      height: 100%;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); 
+    }
     
-    /* CORREÇÃO DA FOTO AQUI */
+    .slide { 
+      min-width: 100%; 
+      height: 100%; 
+      display: flex; 
+      flex-direction: column; 
+      justify-content: center;
+    }
+    
+    /* Foto Estática (Igual aos patrocinadores) */
     .foto { 
       width: 100%;
-      height: 350px; /* Altura fixa para evitar achatamento */
-      background: #f8f9fa; 
+      height: 320px; /* Altura controlada para não empurrar o layout */
+      background: #ffffff; 
       display: flex; 
       align-items: center; 
       justify-content: center; 
-      overflow: hidden; 
+      overflow: hidden;
+      flex-shrink: 0;
     }
     .foto img { 
-      width: 100%; 
-      height: 100%; 
-      object-fit: contain; /* GARANTE QUE A FOTO NÃO ACHATE (Corta as bordas se necessário ou mostra inteira) */
-      background: #000; /* Fundo preto atrás da foto se ela for vertical */
+      max-width: 100%; 
+      max-height: 100%; 
+      object-fit: contain; /* Mantém proporção sem achatar */
     } 
 
-    /* Legenda */
+    /* Legenda Estática */
     .caption { 
-      background: #ffffff; padding: 15px; text-align: center; border-top: 4px solid #ffcc00; 
-      min-height: 130px; 
+      background: #ffffff; 
+      padding: 10px 15px; 
+      text-align: center; 
+      border-top: 3px solid #ffcc00; 
+      flex-shrink: 0;
     }
     .caption b { color: #001a33; font-size: 16px; display: block; text-transform: uppercase; font-weight: 900; }
-    .caption .local { color: #d32f2f; font-size: 12px; display: block; margin-top: 4px; font-weight: bold; }
-    .caption p { color: #444; font-size: 13px; margin: 8px 0 0; line-height: 1.4; }
+    .caption .local { color: #d32f2f; font-size: 12px; display: block; margin-top: 2px; font-weight: bold; }
+    .caption p { color: #444; font-size: 13px; margin: 5px 0 0; line-height: 1.4; }
 
-    /* Botão de Denúncia */
-    .footer-action { text-align: center; padding: 15px 0 25px 0; background: #ffffff; }
+    /* Botão Verde (Fixo no rodapé, bem próximo) */
+    .footer-action { 
+      text-align: center; 
+      padding: 5px 0 15px 0; 
+      background: #ffffff; 
+      flex-shrink: 0;
+    }
     .btn-denuncia {
       display: inline-block;
-      background-color: #d32f2f;
+      background-color: #28a745; /* VERDE */
       color: white;
       text-decoration: none;
-      padding: 12px 28px;
+      padding: 10px 25px;
       border-radius: 30px;
       font-weight: bold;
       font-size: 14px;
       text-transform: uppercase;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
 
-    .loading { color: #001a33; text-align: center; padding: 50px; font-weight: bold; width: 100%; }
+    .loading { color: #001a33; text-align: center; width: 100%; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -76,12 +110,12 @@
     <div id="banner-capa"></div>
 
     <div id="viewport">
-      <div id="track"><div class="loading">Carregando denúncias...</div></div>
+      <div id="track"><div class="loading">Carregando...</div></div>
     </div>
 
     <div class="footer-action">
       <a href="https://forms.gle/mF4KCRneDkT8hYoS7" target="_blank" class="btn-denuncia">
-         📣 CLIQUE AQUI E FAÇA SUA DENÚNCIA
+         📣 FAZER DENÚNCIA
       </a>
     </div>
   </div>
@@ -127,8 +161,11 @@
           }, 10000);
         }
 
-      } catch (e) { console.error(e); }
+      } catch (e) {
+        track.innerHTML = "<div class='loading'>Erro de conexão.</div>";
+      }
     }
+
     carregar();
   </script>
 </body>
