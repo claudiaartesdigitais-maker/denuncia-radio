@@ -17,7 +17,7 @@
       flex-direction: column; 
     }
 
-    /* CAPA AJUSTADA PARA NÃO CORTAR */
+    /* CAPA COM BORDAS ARREDONDADAS */
     #banner-capa { 
       width: 100%; display: none; 
       padding: 10px 0; 
@@ -27,12 +27,13 @@
     #banner-capa img { 
       width: 95%; 
       max-width: 600px; 
-      height: 180px; /* Aumentado de 145px para 180px */
-      object-fit: contain; /* Mudado para contain para mostrar a arte inteira */
-      border-radius: 12px; 
+      height: 180px; 
+      object-fit: contain; 
+      border-radius: 15px; /* BORDAS ARREDONDADAS NA CAPA */
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     }
 
-    /* ÁREA CENTRAL DO FEED */
+    /* ÁREA CENTRAL */
     #viewport { 
       flex: 1; 
       overflow: hidden; 
@@ -50,9 +51,10 @@
       height: 100%; 
       display: flex; 
       flex-direction: column; 
+      padding: 5px 0; /* Espaço para a sombra não cortar */
     }
     
-    /* FOTOS MAXIMIZADAS */
+    /* FOTOS DAS DENÚNCIAS COM BORDAS ARREDONDADAS */
     .foto { 
       flex: 1; 
       width: 100%;
@@ -63,15 +65,17 @@
       overflow: hidden;
     }
     .foto img { 
-      width: 100%; 
-      height: 100%; 
+      width: 92%; /* Reduzi levemente a largura para a borda aparecer melhor */
+      height: 95%; 
       object-fit: contain; 
+      border-radius: 15px; /* BORDAS ARREDONDADAS NAS FOTOS */
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Sombra suave para dar profundidade */
     } 
 
-    /* CONTEÚDO */
+    /* LEGENDA */
     .caption { 
       background: #ffffff; 
-      padding: 5px 20px; 
+      padding: 8px 20px; 
       text-align: center; 
       flex-shrink: 0;
     }
