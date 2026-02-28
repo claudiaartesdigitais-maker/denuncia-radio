@@ -13,7 +13,7 @@
     
     #container { height: 100vh; display: flex; flex-direction: column; }
 
-    /* Banner Dinâmico da Coluna K */
+    /* Banner da Capa (Coluna K) */
     #banner-capa { 
       width: 100%; display: none; 
       padding: 15px 0 5px 0; 
@@ -39,7 +39,7 @@
     .caption .local { color: #d32f2f; font-size: 12px; display: block; margin-top: 4px; font-weight: bold; }
     .caption p { color: #444; font-size: 13px; margin: 8px 0 0; line-height: 1.4; }
 
-    /* Botão de Denúncia Fixo no Rodapé */
+    /* Botão de Denúncia */
     .footer-action { text-align: center; padding: 15px 0 20px 0; background: #ffffff; }
     .btn-denuncia {
       display: inline-block;
@@ -63,7 +63,7 @@
     <div id="banner-capa"></div>
 
     <div id="viewport">
-      <div id="track"><div class="loading">Carregando denúncias...</div></div>
+      <div id="track"><div class="loading">A carregar denúncias...</div></div>
     </div>
 
     <div class="footer-action">
@@ -74,7 +74,8 @@
   </div>
 
   <script>
-    const apiURL = "https://script.google.com/macros/s/AKfycbxSgxohW-83EVHyGPPNlFHDYfZCp9OjdchrCEKmOUdILGJXumvEpG7967wY70VF1lZMBg/exec";
+    // URL ATUALIZADA QUE ACABOU DE ENVIAR
+    const apiURL = "https://script.google.com/macros/s/AKfycbxOeKABcKIm91abPvfoRFe13QSnMHB2e6QfNbtFN1OZBYiV0F3Ip_FqkEqjKwtVvqqd7w/exec";
 
     async function carregar() {
       const track = document.getElementById("track");
@@ -89,14 +90,18 @@
           return;
         }
 
+        // Mostrar Capa (Coluna K)
         if (dados[0].capa && dados[0].capa.length > 5) {
           banner.innerHTML = `<img src="${dados[0].capa}">`;
           banner.style.display = "block";
         }
 
+        // Mostrar Slides com referrerpolicy para carregar fotos do Drive
         track.innerHTML = dados.map(item => `
           <div class="slide">
-            <div class="foto"><img src="${item.foto}"></div>
+            <div class="foto">
+                <img src="${item.foto}" referrerpolicy="no-referrer">
+            </div>
             <div class="caption">
               <b>🎙️ ${item.assunto}</b>
               <span class="local">📍 ${item.local}</span>
