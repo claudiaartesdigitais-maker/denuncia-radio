@@ -8,39 +8,53 @@
       margin: 0; padding: 0; height: 100%; width: 100%; 
       background: #ffffff; 
       font-family: 'Segoe UI', Roboto, sans-serif; 
-      overflow: hidden; 
+      overflow-x: hidden; 
     }
     
-    #container { height: 100vh; display: flex; flex-direction: column; }
+    #container { display: flex; flex-direction: column; min-height: 100vh; }
 
-    /* Banner da Capa (Coluna K) */
+    /* Banner da Capa */
     #banner-capa { 
       width: 100%; display: none; 
       padding: 15px 0 5px 0; 
       text-align: center; 
     }
-    #banner-capa img { width: 92%; max-width: 600px; height: auto; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    #banner-capa img { width: 92%; max-width: 600px; height: auto; border-radius: 10px; }
 
     /* Área do Carrossel */
     #viewport { flex: 1; overflow: hidden; position: relative; }
-    #track { display: flex; height: 100%; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+    #track { display: flex; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
     
-    .slide { min-width: 100%; height: 100%; display: flex; flex-direction: column; }
+    .slide { min-width: 100%; display: flex; flex-direction: column; }
     
-    .foto { flex: 1; background: #f8f9fa; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    .foto img { width: 100%; height: 100%; object-fit: cover; } 
+    /* CORREÇÃO DA FOTO AQUI */
+    .foto { 
+      width: 100%;
+      height: 350px; /* Altura fixa para evitar achatamento */
+      background: #f8f9fa; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      overflow: hidden; 
+    }
+    .foto img { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: contain; /* GARANTE QUE A FOTO NÃO ACHATE (Corta as bordas se necessário ou mostra inteira) */
+      background: #000; /* Fundo preto atrás da foto se ela for vertical */
+    } 
 
     /* Legenda */
     .caption { 
       background: #ffffff; padding: 15px; text-align: center; border-top: 4px solid #ffcc00; 
-      min-height: 125px; box-sizing: border-box;
+      min-height: 130px; 
     }
     .caption b { color: #001a33; font-size: 16px; display: block; text-transform: uppercase; font-weight: 900; }
     .caption .local { color: #d32f2f; font-size: 12px; display: block; margin-top: 4px; font-weight: bold; }
     .caption p { color: #444; font-size: 13px; margin: 8px 0 0; line-height: 1.4; }
 
     /* Botão de Denúncia */
-    .footer-action { text-align: center; padding: 15px 0 20px 0; background: #ffffff; }
+    .footer-action { text-align: center; padding: 15px 0 25px 0; background: #ffffff; }
     .btn-denuncia {
       display: inline-block;
       background-color: #d32f2f;
@@ -50,7 +64,6 @@
       border-radius: 30px;
       font-weight: bold;
       font-size: 14px;
-      box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
       text-transform: uppercase;
     }
 
@@ -63,7 +76,7 @@
     <div id="banner-capa"></div>
 
     <div id="viewport">
-      <div id="track"><div class="loading">A carregar denúncias...</div></div>
+      <div id="track"><div class="loading">Carregando denúncias...</div></div>
     </div>
 
     <div class="footer-action">
@@ -74,7 +87,6 @@
   </div>
 
   <script>
-    // URL ATUALIZADA QUE ACABOU DE ENVIAR
     const apiURL = "https://script.google.com/macros/s/AKfycbxOeKABcKIm91abPvfoRFe13QSnMHB2e6QfNbtFN1OZBYiV0F3Ip_FqkEqjKwtVvqqd7w/exec";
 
     async function carregar() {
@@ -90,13 +102,11 @@
           return;
         }
 
-        // Mostrar Capa (Coluna K)
-        if (dados[0].capa && dados[0].capa.length > 5) {
+        if (dados[0].capa) {
           banner.innerHTML = `<img src="${dados[0].capa}">`;
           banner.style.display = "block";
         }
 
-        // Mostrar Slides com referrerpolicy para carregar fotos do Drive
         track.innerHTML = dados.map(item => `
           <div class="slide">
             <div class="foto">
@@ -117,12 +127,8 @@
           }, 10000);
         }
 
-      } catch (e) {
-        track.innerHTML = "<div class='loading'>Erro ao conectar com a central.</div>";
-        console.error(e);
-      }
+      } catch (e) { console.error(e); }
     }
-
     carregar();
   </script>
 </body>
